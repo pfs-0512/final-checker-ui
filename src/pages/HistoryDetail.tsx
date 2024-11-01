@@ -2,13 +2,13 @@ import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { formatDistanceToNow } from "date-fns";
+import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 
-// サンプルデータ（実際の実装では、IDに基づいてデータを取得する）
 const mockHistory = {
   id: "1",
   timestamp: new Date("2024-02-20T10:00:00"),
+  updatedBy: "山田太郎",
   changes: [
     { field: "メールアドレス", oldValue: "old@example.com", newValue: "new@example.com" },
     { field: "対象エリア", oldValue: "東京", newValue: "全国" }
@@ -19,7 +19,6 @@ const HistoryDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // 実際の実装では、IDに基づいて履歴データを取得する
   const historyItem = mockHistory;
 
   return (
@@ -27,9 +26,14 @@ const HistoryDetail = () => {
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow p-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">変更履歴詳細</h1>
-          <p className="text-gray-600">
-            {formatDistanceToNow(historyItem.timestamp, { addSuffix: true, locale: ja })}
-          </p>
+          <div className="text-right">
+            <p className="text-gray-600 mb-1">
+              {format(historyItem.timestamp, 'yyyy/MM/dd HH:mm', { locale: ja })}
+            </p>
+            <p className="text-gray-600">
+              変更者: {historyItem.updatedBy}
+            </p>
+          </div>
         </div>
 
         <ScrollArea className="h-[60vh] w-full rounded-md border p-4">
