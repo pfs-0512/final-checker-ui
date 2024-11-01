@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
-import { Badge } from "@/components/ui/badge";
 
 const mockHistory = {
   id: "1",
@@ -34,6 +33,20 @@ const HistoryDetail = () => {
   const navigate = useNavigate();
   const historyItem = mockHistory;
 
+  const getBeforeAfterValues = (change: typeof mockHistory.changes[0]) => {
+    const beforeValues = change.details
+      .filter(detail => detail.type === "removed")
+      .map(detail => detail.value);
+    const afterValues = change.details
+      .filter(detail => detail.type === "added")
+      .map(detail => detail.value);
+    
+    return {
+      before: beforeValues.length > 0 ? beforeValues.join(", ") : "(なし)",
+      after: afterValues.length > 0 ? afterValues.join(", ") : "(なし)"
+    };
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow p-6">
@@ -55,42 +68,29 @@ const HistoryDetail = () => {
         </div>
 
         <ScrollArea className="h-[60vh] w-full rounded-md border p-4">
-          <div className="space-y-6">
-            {historyItem.changes.map((change, index) => (
-              <div key={index} className="border-b pb-4">
-                <h3 className="font-medium text-lg mb-4">{change.category}</h3>
-                <div className="space-y-4">
-                  {change.details.some(detail => detail.type === "added") && (
+          <div className="space-y-4">
+            {historyItem.changes.map((change, index) => {
+              const { before, after } = getBeforeAfterValues(change);
+              return (
+                <div key={index} className="border-b pb-4">
+                  <h3 className="font-medium mb-2">{change.category}</h3>
+                  <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <p className="text-sm text-muted-foreground mb-2">追加:</p>
-                      <div className="flex flex-wrap gap-2">
-                        {change.details
-                          .filter(detail => detail.type === "added")
-                          .map((detail, i) => (
-                            <Badge key={i} variant="default" className="bg-green-500">
-                              {detail.value}
-                            </Badge>
-                          ))}
+                      <p className="text-sm text-muted-foreground mb-1">変更前:</p>
+                      <div className="bg-red-50 p-2 rounded">
+                        <p className="text-red-700">{before}</p>
                       </div>
                     </div>
-                  )}
-                  {change.details.some(detail => detail.type === "removed") && (
                     <div>
-                      <p className="text-sm text-muted-foreground mb-2">削除:</p>
-                      <div className="flex flex-wrap gap-2">
-                        {change.details
-                          .filter(detail => detail.type === "removed")
-                          .map((detail, i) => (
-                            <Badge key={i} variant="default" className="bg-red-500">
-                              {detail.value}
-                            </Badge>
-                          ))}
+                      <p className="text-sm text-muted-foreground mb-1">変更後:</p>
+                      <div className="bg-green-50 p-2 rounded">
+                        <p className="text-green-700">{after}</p>
                       </div>
                     </div>
-                  )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </ScrollArea>
 
