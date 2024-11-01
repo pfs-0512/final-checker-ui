@@ -5,15 +5,22 @@ import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 
+interface ChangeDetail {
+  type: 'added' | 'removed';
+  value: string;
+}
+
+interface Change {
+  category: string;
+  details: ChangeDetail[];
+}
+
 interface HistoryItem {
   id: string;
   timestamp: Date;
   updatedBy: string;
-  changes: {
-    field: string;
-    oldValue: string;
-    newValue: string;
-  }[];
+  shopName: string;
+  changes: Change[];
 }
 
 const mockHistory: HistoryItem[] = [
@@ -21,84 +28,37 @@ const mockHistory: HistoryItem[] = [
     id: "1",
     timestamp: new Date("2024-02-20T10:00:00"),
     updatedBy: "山田太郎",
+    shopName: "カーショップA",
     changes: [
-      { field: "メールアドレス", oldValue: "old@example.com", newValue: "new@example.com" },
-      { field: "対象エリア", oldValue: "東京", newValue: "全国" }
+      {
+        category: "エリア",
+        details: [
+          { type: "added", value: "東京都" },
+          { type: "removed", value: "神奈川県" }
+        ]
+      },
+      {
+        category: "メーカー",
+        details: [
+          { type: "added", value: "トヨタ" },
+          { type: "added", value: "ホンダ" }
+        ]
+      }
     ]
   },
   {
     id: "2",
     timestamp: new Date("2024-02-19T15:30:00"),
     updatedBy: "鈴木花子",
+    shopName: "カーショップB",
     changes: [
-      { field: "対象エリア", oldValue: "大阪", newValue: "東京" }
-    ]
-  },
-  {
-    id: "3",
-    timestamp: new Date("2024-02-18T09:15:00"),
-    updatedBy: "佐藤一郎",
-    changes: [
-      { field: "メールアドレス", oldValue: "sato@example.com", newValue: "sato.new@example.com" }
-    ]
-  },
-  {
-    id: "4",
-    timestamp: new Date("2024-02-17T14:20:00"),
-    updatedBy: "田中美咲",
-    changes: [
-      { field: "対象エリア", oldValue: "九州", newValue: "福岡" }
-    ]
-  },
-  {
-    id: "5",
-    timestamp: new Date("2024-02-16T11:45:00"),
-    updatedBy: "山田太郎",
-    changes: [
-      { field: "メールアドレス", oldValue: "info@example.com", newValue: "contact@example.com" },
-      { field: "対象エリア", oldValue: "関東", newValue: "東京" }
-    ]
-  },
-  {
-    id: "6",
-    timestamp: new Date("2024-02-15T16:30:00"),
-    updatedBy: "鈴木花子",
-    changes: [
-      { field: "対象エリア", oldValue: "北海道", newValue: "札幌" }
-    ]
-  },
-  {
-    id: "7",
-    timestamp: new Date("2024-02-14T13:10:00"),
-    updatedBy: "高橋健一",
-    changes: [
-      { field: "メールアドレス", oldValue: "takahashi@example.com", newValue: "ken1@example.com" }
-    ]
-  },
-  {
-    id: "8",
-    timestamp: new Date("2024-02-13T10:25:00"),
-    updatedBy: "渡辺直子",
-    changes: [
-      { field: "対象エリア", oldValue: "中部", newValue: "愛知" },
-      { field: "メールアドレス", oldValue: "naoko@example.com", newValue: "watanabe@example.com" }
-    ]
-  },
-  {
-    id: "9",
-    timestamp: new Date("2024-02-12T17:40:00"),
-    updatedBy: "伊藤裕子",
-    changes: [
-      { field: "対象エリア", oldValue: "関西", newValue: "大阪" }
-    ]
-  },
-  {
-    id: "10",
-    timestamp: new Date("2024-02-11T08:55:00"),
-    updatedBy: "小林誠",
-    changes: [
-      { field: "メールアドレス", oldValue: "kobayashi@example.com", newValue: "makoto@example.com" },
-      { field: "対象エリア", oldValue: "四国", newValue: "香川" }
+      {
+        category: "車種",
+        details: [
+          { type: "added", value: "プリウス" },
+          { type: "removed", value: "アクア" }
+        ]
+      }
     ]
   }
 ];
@@ -106,17 +66,23 @@ const mockHistory: HistoryItem[] = [
 const History = () => {
   const navigate = useNavigate();
 
+  const getCategorySummary = (changes: Change[]) => {
+    return changes.map(change => change.category).join(", ");
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 p-4">
-      <div className="max-w-6xl mx-auto bg-white rounded-lg shadow p-6">
+      <div className="max-w-7xl mx-auto bg-white rounded-lg shadow p-6">
         <h1 className="text-2xl font-bold mb-6">変更履歴一覧</h1>
         
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>日時</TableHead>
+              <TableHead>変更日時</TableHead>
               <TableHead>変更者</TableHead>
-              <TableHead>操作</TableHead>
+              <TableHead>買取店名</TableHead>
+              <TableHead>変更項目</TableHead>
+              <TableHead className="text-right">操作</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -126,7 +92,9 @@ const History = () => {
                   {format(item.timestamp, 'yyyy/MM/dd HH:mm', { locale: ja })}
                 </TableCell>
                 <TableCell>{item.updatedBy}</TableCell>
-                <TableCell>
+                <TableCell>{item.shopName}</TableCell>
+                <TableCell>{getCategorySummary(item.changes)}</TableCell>
+                <TableCell className="text-right">
                   <Button
                     variant="outline"
                     size="sm"
