@@ -43,6 +43,20 @@ const mockHistory: HistoryItem[] = [
           { type: "added", value: "トヨタ" },
           { type: "added", value: "ホンダ" }
         ]
+      },
+      {
+        category: "車種",
+        details: [
+          { type: "added", value: "プリウス" },
+          { type: "removed", value: "アクア" }
+        ]
+      },
+      {
+        category: "ボディタイプ",
+        details: [
+          { type: "added", value: "セダン" },
+          { type: "removed", value: "軽自動車" }
+        ]
       }
     ]
   },
@@ -67,7 +81,7 @@ const History = () => {
   const navigate = useNavigate();
 
   const getCategorySummary = (changes: Change[]) => {
-    return changes.map(change => change.category).join(", ");
+    return changes.map(change => change.category).join("、");
   };
 
   return (
