@@ -15,14 +15,36 @@ const mockHistory = {
       category: "エリア",
       details: [
         { type: "added", value: "東京都" },
-        { type: "removed", value: "神奈川県" }
+        { type: "added", value: "千葉県" },
+        { type: "added", value: "埼玉県" },
+        { type: "removed", value: "神奈川県" },
+        { type: "removed", value: "静岡県" }
       ]
     },
     {
       category: "メーカー",
       details: [
         { type: "added", value: "トヨタ" },
-        { type: "added", value: "ホンダ" }
+        { type: "added", value: "ホンダ" },
+        { type: "added", value: "日産" },
+        { type: "removed", value: "スバル" }
+      ]
+    },
+    {
+      category: "車種",
+      details: [
+        { type: "added", value: "プリウス" },
+        { type: "added", value: "アクア" },
+        { type: "removed", value: "ヴィッツ" },
+        { type: "removed", value: "フィット" }
+      ]
+    },
+    {
+      category: "ボディタイプ",
+      details: [
+        { type: "added", value: "セダン" },
+        { type: "added", value: "SUV" },
+        { type: "removed", value: "軽自動車" }
       ]
     }
   ]
@@ -33,18 +55,11 @@ const HistoryDetail = () => {
   const navigate = useNavigate();
   const historyItem = mockHistory;
 
-  const getBeforeAfterValues = (change: typeof mockHistory.changes[0]) => {
-    const beforeValues = change.details
-      .filter(detail => detail.type === "removed")
+  const getChanges = (change: typeof mockHistory.changes[0], type: "added" | "removed") => {
+    const values = change.details
+      .filter(detail => detail.type === type)
       .map(detail => detail.value);
-    const afterValues = change.details
-      .filter(detail => detail.type === "added")
-      .map(detail => detail.value);
-    
-    return {
-      before: beforeValues.length > 0 ? beforeValues.join(", ") : "(なし)",
-      after: afterValues.length > 0 ? afterValues.join(", ") : "(なし)"
-    };
+    return values.length > 0 ? values.join("、") : "(なし)";
   };
 
   return (
@@ -68,29 +83,26 @@ const HistoryDetail = () => {
         </div>
 
         <ScrollArea className="h-[60vh] w-full rounded-md border p-4">
-          <div className="space-y-4">
-            {historyItem.changes.map((change, index) => {
-              const { before, after } = getBeforeAfterValues(change);
-              return (
-                <div key={index} className="border-b pb-4">
-                  <h3 className="font-medium mb-2">{change.category}</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">変更前:</p>
-                      <div className="bg-red-50 p-2 rounded">
-                        <p className="text-red-700">{before}</p>
-                      </div>
+          <div className="space-y-6">
+            {historyItem.changes.map((change, index) => (
+              <div key={index} className="border-b pb-6">
+                <h3 className="font-medium text-lg mb-4">{change.category}</h3>
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-2">追加された項目:</p>
+                    <div className="bg-green-50 p-3 rounded">
+                      <p className="text-green-700">{getChanges(change, "added")}</p>
                     </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">変更後:</p>
-                      <div className="bg-green-50 p-2 rounded">
-                        <p className="text-green-700">{after}</p>
-                      </div>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-2">削除された項目:</p>
+                    <div className="bg-red-50 p-3 rounded">
+                      <p className="text-red-700">{getChanges(change, "removed")}</p>
                     </div>
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         </ScrollArea>
 
