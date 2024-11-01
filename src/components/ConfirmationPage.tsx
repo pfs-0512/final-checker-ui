@@ -21,37 +21,53 @@ const ConfirmationPage = ({ onClose, onConfirm, changes }: ConfirmationPageProps
         <h2 className="text-2xl font-bold mb-6">変更内容の確認</h2>
         
         <ScrollArea className="h-[60vh] w-full rounded-md border p-4">
-          <div className="space-y-4">
+          <div className="space-y-8">
             {changes.map((change, index) => (
-              <div key={index} className="border-b pb-4">
-                <h3 className="font-medium mb-2">{change.field}</h3>
-                <div className="grid grid-cols-2 gap-4">
+              <div key={index} className="border-b pb-8">
+                <h3 className="font-medium text-lg mb-6">{change.field}</h3>
+                
+                <div className="space-y-6">
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-2">変更前の選択肢:</p>
+                      <div className="bg-gray-50 p-3 rounded">
+                        <p className="text-gray-700">
+                          {Array.isArray(change.oldValue) 
+                            ? change.oldValue.join("、") || "(なし)"
+                            : change.oldValue || "(なし)"}
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-2">変更後の選択肢:</p>
+                      <div className="bg-gray-50 p-3 rounded">
+                        <p className="text-gray-700">
+                          {Array.isArray(change.newValue)
+                            ? change.newValue.join("、") || "(なし)"
+                            : change.newValue || "(なし)"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
                   <div>
-                    <p className="text-sm text-muted-foreground mb-1">変更前:</p>
-                    <div className="bg-red-50 p-2 rounded">
-                      {Array.isArray(change.oldValue) ? (
-                        <ul className="list-disc list-inside">
-                          {change.oldValue.map((item, i) => (
-                            <li key={i} className="text-red-700">{item}</li>
-                          ))}
-                        </ul>
-                      ) : (
-                        <p className="text-red-700">{change.oldValue || '(なし)'}</p>
-                      )}
+                    <p className="text-sm text-muted-foreground mb-2">追加された項目:</p>
+                    <div className="bg-green-50 p-3 rounded">
+                      <p className="text-green-700">
+                        {Array.isArray(change.newValue) && Array.isArray(change.oldValue)
+                          ? change.newValue.filter(item => !change.oldValue.includes(item)).join("、") || "(なし)"
+                          : change.newValue || "(なし)"}
+                      </p>
                     </div>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground mb-1">変更後:</p>
-                    <div className="bg-green-50 p-2 rounded">
-                      {Array.isArray(change.newValue) ? (
-                        <ul className="list-disc list-inside">
-                          {change.newValue.map((item, i) => (
-                            <li key={i} className="text-green-700">{item}</li>
-                          ))}
-                        </ul>
-                      ) : (
-                        <p className="text-green-700">{change.newValue || '(なし)'}</p>
-                      )}
+                    <p className="text-sm text-muted-foreground mb-2">削除された項目:</p>
+                    <div className="bg-red-50 p-3 rounded">
+                      <p className="text-red-700">
+                        {Array.isArray(change.oldValue) && Array.isArray(change.newValue)
+                          ? change.oldValue.filter(item => !change.newValue.includes(item)).join("、") || "(なし)"
+                          : change.oldValue || "(なし)"}
+                      </p>
                     </div>
                   </div>
                 </div>
