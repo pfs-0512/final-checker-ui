@@ -19,7 +19,9 @@ const mockHistory = {
         { type: "added", value: "埼玉県" },
         { type: "removed", value: "神奈川県" },
         { type: "removed", value: "静岡県" }
-      ]
+      ],
+      before: ["神奈川県", "静岡県"],
+      after: ["東京都", "千葉県", "埼玉県"]
     },
     {
       category: "メーカー",
@@ -28,7 +30,9 @@ const mockHistory = {
         { type: "added", value: "ホンダ" },
         { type: "added", value: "日産" },
         { type: "removed", value: "スバル" }
-      ]
+      ],
+      before: ["スバル"],
+      after: ["トヨタ", "ホンダ", "日産"]
     },
     {
       category: "車種",
@@ -37,7 +41,9 @@ const mockHistory = {
         { type: "added", value: "アクア" },
         { type: "removed", value: "ヴィッツ" },
         { type: "removed", value: "フィット" }
-      ]
+      ],
+      before: ["ヴィッツ", "フィット"],
+      after: ["プリウス", "アクア"]
     },
     {
       category: "ボディタイプ",
@@ -45,7 +51,9 @@ const mockHistory = {
         { type: "added", value: "セダン" },
         { type: "added", value: "SUV" },
         { type: "removed", value: "軽自動車" }
-      ]
+      ],
+      before: ["軽自動車"],
+      after: ["セダン", "SUV"]
     }
   ]
 };
@@ -83,11 +91,33 @@ const HistoryDetail = () => {
         </div>
 
         <ScrollArea className="h-[60vh] w-full rounded-md border p-4">
-          <div className="space-y-6">
+          <div className="space-y-8">
             {historyItem.changes.map((change, index) => (
-              <div key={index} className="border-b pb-6">
-                <h3 className="font-medium text-lg mb-4">{change.category}</h3>
-                <div className="space-y-4">
+              <div key={index} className="border-b pb-8">
+                <h3 className="font-medium text-lg mb-6">{change.category}</h3>
+                
+                <div className="space-y-6">
+                  {/* 変更前後の全体表示 */}
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-2">変更前の選択肢:</p>
+                      <div className="bg-gray-50 p-3 rounded">
+                        <p className="text-gray-700">
+                          {change.before.length > 0 ? change.before.join("、") : "(なし)"}
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-2">変更後の選択肢:</p>
+                      <div className="bg-gray-50 p-3 rounded">
+                        <p className="text-gray-700">
+                          {change.after.length > 0 ? change.after.join("、") : "(なし)"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 追加・削除された項目の詳細表示 */}
                   <div>
                     <p className="text-sm text-muted-foreground mb-2">追加された項目:</p>
                     <div className="bg-green-50 p-3 rounded">
