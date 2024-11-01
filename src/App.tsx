@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import History from "./pages/History";
 import HistoryDetail from "./pages/HistoryDetail";
+import Specification from "./pages/Specification";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ const App = () => (
           <Route path="/" element={<Navigate to="/confirm" replace />} />
           <Route path="/history" element={<History />} />
           <Route path="/history/:id" element={<HistoryDetail />} />
+          <Route path="/specification" element={<Specification />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
