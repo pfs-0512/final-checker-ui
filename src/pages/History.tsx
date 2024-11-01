@@ -81,7 +81,7 @@ const History = () => {
               <TableHead>変更日時</TableHead>
               <TableHead>変更者</TableHead>
               <TableHead>買取店名</TableHead>
-              <TableHead>変更項目</TableHead>
+              <TableHead>変更項目（カテゴリ）</TableHead>
               <TableHead className="text-right">操作</TableHead>
             </TableRow>
           </TableHeader>
