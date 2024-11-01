@@ -10,7 +10,7 @@ const Specification = () => {
         <ScrollArea className="h-[80vh]">
           <div className="space-y-12">
             <section>
-              <h2 className="text-xl font-semibold mb-4 border-b pb-2">/confirmの仕様 / /confirm Specifications</h2>
+              <h2 className="text-xl font-semibold mb-4 border-b pb-2">/confirmの仕様 confirm Specifications</h2>
               <div className="space-y-6">
                 <div>
                   <h3 className="font-medium mb-2">日本語</h3>
@@ -38,7 +38,7 @@ const Specification = () => {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold mb-4 border-b pb-2">/historyの仕様 / /history Specifications</h2>
+              <h2 className="text-xl font-semibold mb-4 border-b pb-2">/historyの仕様 history Specifications</h2>
               <div className="space-y-6">
                 <div>
                   <h3 className="font-medium mb-2">日本語</h3>
@@ -66,7 +66,7 @@ const Specification = () => {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold mb-4 border-b pb-2">/history/:idの仕様 / /history/:id Specifications</h2>
+              <h2 className="text-xl font-semibold mb-4 border-b pb-2">/history/:idの仕様 history/:id Specifications</h2>
               <div className="space-y-6">
                 <div>
                   <h3 className="font-medium mb-2">日本語</h3>
