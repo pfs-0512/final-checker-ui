@@ -121,7 +121,7 @@ const History = () => {
           </TableHeader>
           <TableBody>
             {mockHistory.map((item) => (
-              <TableRow key={item.id} className="cursor-pointer hover:bg-gray-50" onClick={() => navigate(`/history/${item.id}`)}>
+              <TableRow key={item.id}>
                 <TableCell>
                   {format(item.timestamp, 'yyyy/MM/dd HH:mm', { locale: ja })}
                 </TableCell>
@@ -130,12 +130,9 @@ const History = () => {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigate(`/history/${item.id}`);
-                    }}
+                    onClick={() => navigate(`/history/${item.id}`)}
                   >
-                    詳細を見る
+                    詳細
                   </Button>
                 </TableCell>
               </TableRow>
