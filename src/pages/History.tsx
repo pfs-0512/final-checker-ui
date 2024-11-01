@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 
@@ -126,15 +127,16 @@ const History = () => {
                 </TableCell>
                 <TableCell>{item.updatedBy}</TableCell>
                 <TableCell>
-                  <button 
-                    className="text-blue-600 hover:text-blue-800"
+                  <Button
+                    variant="outline"
+                    size="sm"
                     onClick={(e) => {
                       e.stopPropagation();
                       navigate(`/history/${item.id}`);
                     }}
                   >
                     詳細を見る
-                  </button>
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
