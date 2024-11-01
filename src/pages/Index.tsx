@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import ConfirmationDialog from "@/components/ConfirmationDialog";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
+import ConfirmationPage from "@/components/ConfirmationPage";
 
 const Index = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -10,7 +10,6 @@ const Index = () => {
     area: "全国",
   });
 
-  // 前回の値を保存
   const [previousData, setPreviousData] = useState({
     email: "old@example.com",
     area: "東京",
@@ -18,7 +17,6 @@ const Index = () => {
 
   const [changes, setChanges] = useState([]);
 
-  // フォームデータが変更されるたびに変更内容を確認
   useEffect(() => {
     const changesArray = [
       {
@@ -49,7 +47,6 @@ const Index = () => {
 
   const handleConfirm = async () => {
     try {
-      // 確定時の処理
       setPreviousData(formData);
       toast({
         title: "更新完了",
@@ -64,6 +61,16 @@ const Index = () => {
       });
     }
   };
+
+  if (showConfirmation) {
+    return (
+      <ConfirmationPage
+        changes={changes}
+        onClose={() => setShowConfirmation(false)}
+        onConfirm={handleConfirm}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">
@@ -93,13 +100,6 @@ const Index = () => {
             />
           </div>
         </div>
-
-        <ConfirmationDialog
-          isOpen={showConfirmation}
-          onClose={() => setShowConfirmation(false)}
-          onConfirm={handleConfirm}
-          changes={changes}
-        />
       </div>
     </div>
   );

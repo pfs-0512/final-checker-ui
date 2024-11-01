@@ -1,5 +1,4 @@
 import React from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -9,20 +8,17 @@ interface DiffItem {
   newValue: string | string[];
 }
 
-interface ConfirmationDialogProps {
-  isOpen: boolean;
+interface ConfirmationPageProps {
   onClose: () => void;
   onConfirm: () => void;
   changes: DiffItem[];
 }
 
-const ConfirmationDialog = ({ isOpen, onClose, onConfirm, changes }: ConfirmationDialogProps) => {
+const ConfirmationPage = ({ onClose, onConfirm, changes }: ConfirmationPageProps) => {
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl max-h-[80vh]">
-        <DialogHeader>
-          <DialogTitle>変更内容の確認</DialogTitle>
-        </DialogHeader>
+    <div className="min-h-screen bg-gray-50 p-4">
+      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow p-6">
+        <h2 className="text-2xl font-bold mb-6">変更内容の確認</h2>
         
         <ScrollArea className="h-[60vh] w-full rounded-md border p-4">
           <div className="space-y-4">
@@ -64,17 +60,17 @@ const ConfirmationDialog = ({ isOpen, onClose, onConfirm, changes }: Confirmatio
           </div>
         </ScrollArea>
 
-        <DialogFooter className="sm:justify-between">
+        <div className="flex justify-between mt-6">
           <Button variant="outline" onClick={onClose}>
             キャンセル
           </Button>
           <Button onClick={onConfirm}>
             変更を確定する
           </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default ConfirmationDialog;
+export default ConfirmationPage;
