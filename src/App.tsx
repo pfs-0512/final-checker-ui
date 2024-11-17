@@ -19,7 +19,6 @@ const App: React.FC = () => {
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
             <Route path="/confirm" element={<Index />} />
             <Route path="/history" element={<History />} />
             <Route path="/history/:id" element={<HistoryDetail />} />
