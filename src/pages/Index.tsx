@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 import ConfirmationPage from "@/components/ConfirmationPage";
+import { z } from "zod";
+
+const formSchema = z.object({
+  email: z.string().email("有効なメールアドレスを入力してください"),
+  area: z.string().min(1, "対象エリアを入力してください"),
+});
 
 const Index = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -14,6 +22,11 @@ const Index = () => {
     email: "old@example.com",
     area: "東京",
   });
+
+  const [errors, setErrors] = useState<{
+    email?: string;
+    area?: string;
+  }>({});
 
   const [changes, setChanges] = useState([]);
 
@@ -33,9 +46,25 @@ const Index = () => {
 
     if (changesArray.length > 0) {
       setChanges(changesArray);
-      setShowConfirmation(true);
     }
   }, [formData, previousData]);
+
+  const validateForm = () => {
+    try {
+      formSchema.parse(formData);
+      setErrors({});
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const newErrors = {};
+        error.errors.forEach((err) => {
+          newErrors[err.path[0]] = err.message;
+        });
+        setErrors(newErrors);
+      }
+      return false;
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -43,6 +72,18 @@ const Index = () => {
       ...prev,
       [name]: value
     }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validateForm() && changes.length > 0) {
+      setShowConfirmation(true);
+    } else if (changes.length === 0) {
+      toast({
+        title: "変更なし",
+        description: "変更された項目がありません。",
+      });
+    }
   };
 
   const handleConfirm = async () => {
@@ -77,29 +118,41 @@ const Index = () => {
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow p-6">
         <h1 className="text-2xl font-bold mb-6">一般店マッチング条件</h1>
         
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">メールアドレス</label>
-            <input
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="email">メールアドレス</Label>
+            <Input
+              id="email"
               type="email"
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              className="w-full p-2 border rounded"
+              className={errors.email ? "border-red-500" : ""}
             />
+            {errors.email && (
+              <p className="text-sm text-red-500">{errors.email}</p>
+            )}
           </div>
           
-          <div>
-            <label className="block text-sm font-medium mb-1">対象エリア</label>
-            <input
+          <div className="space-y-2">
+            <Label htmlFor="area">対象エリア</Label>
+            <Input
+              id="area"
               type="text"
               name="area"
               value={formData.area}
               onChange={handleInputChange}
-              className="w-full p-2 border rounded"
+              className={errors.area ? "border-red-500" : ""}
             />
+            {errors.area && (
+              <p className="text-sm text-red-500">{errors.area}</p>
+            )}
           </div>
-        </div>
+
+          <Button type="submit" className="w-full">
+            変更を確認する
+          </Button>
+        </form>
       </div>
     </div>
   );
