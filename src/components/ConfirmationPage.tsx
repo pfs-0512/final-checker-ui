@@ -80,7 +80,7 @@ const ConfirmationPage = ({ onClose, onConfirm, changes }: ConfirmationPageProps
           <Button variant="outline" onClick={onClose}>
             キャンセル
           </Button>
-          <Button onClick={() => {}}>
+          <Button onClick={onConfirm}>
             変更を確定する
           </Button>
         </div>
