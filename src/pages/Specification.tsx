@@ -15,8 +15,7 @@ const Specification = () => {
                 <div>
                   <h3 className="font-medium mb-2">日本語</h3>
                   <ul className="list-disc list-inside space-y-2 ml-4">
-                    <li>一般店マッチング条件の設定変更を確認するページ</li>
-                    <li>メールアドレスと対象エリアの入力フォームを提供</li>
+                    <li>マッチング条件の変更フォーム</li>
                     <li>入力値に変更があった場合、確認画面を表示</li>
                     <li>確認画面では変更前後の選択肢を比較表示</li>
                     <li>追加された項目は緑背景、削除された項目は赤背景で表示</li>
@@ -27,7 +26,6 @@ const Specification = () => {
                   <h3 className="font-medium mb-2">English</h3>
                   <ul className="list-disc list-inside space-y-2 ml-4">
                     <li>Page for confirming changes to general store matching conditions</li>
-                    <li>Provides input forms for email and target area</li>
                     <li>Displays confirmation screen when input values change</li>
                     <li>Shows comparison of before and after changes</li>
                     <li>Added items shown with green background, removed items with red background</li>
