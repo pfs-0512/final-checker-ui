@@ -82,6 +82,21 @@ const HistoryDetail = () => {
   const navigate = useNavigate();
   const historyItem = mockHistory[id as keyof typeof mockHistory];
 
+  // Add error handling for when history item is not found
+  if (!historyItem) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-4">
+        <div className="max-w-4xl mx-auto bg-white rounded-lg shadow p-6">
+          <h1 className="text-2xl font-bold mb-6">変更履歴詳細</h1>
+          <p className="text-gray-600 mb-6">指定された履歴が見つかりませんでした。</p>
+          <Button variant="outline" onClick={() => navigate("/history")}>
+            一覧に戻る
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   const getChanges = (change: typeof mockHistory["1"]["changes"][0], type: "added" | "removed") => {
     const values = change.details
       .filter(detail => detail.type === type)
