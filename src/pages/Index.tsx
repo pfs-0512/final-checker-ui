@@ -7,12 +7,21 @@ const Index = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
-    area: "全国",
+    area: "島根県、鳥取県、和歌山県、奈良県、兵庫県",
+    cities: [
+      "松江市", "出雲市", "浜田市", "益田市", "鳥取市", "米子市", "倉吉市", 
+      "和歌山市", "田辺市", "新宮市", "奈良市", "橿原市", "神戸市", "姫路市"
+    ]
   });
 
   const [previousData, setPreviousData] = useState({
     email: "old@example.com",
-    area: "東京",
+    area: "北海道、青森県、岩手県、宮城県、秋田県、茨城県、栃木県、群馬県、埼玉県、千葉県、東京都",
+    cities: [
+      "札幌市", "函館市", "旭川市", "青森市", "弘前市", "八戸市", "盛岡市", 
+      "一関市", "仙台市", "石巻市", "秋田市", "水戸市", "つくば市", "宇都宮市",
+      "前橋市", "さいたま市", "川越市", "千葉市", "船橋市", "渋谷区", "新宿区"
+    ]
   });
 
   const [changes, setChanges] = useState([]);
@@ -26,10 +35,20 @@ const Index = () => {
       },
       {
         field: "対象エリア",
-        oldValue: previousData.area,
-        newValue: formData.area,
+        oldValue: previousData.area.split("、"),
+        newValue: formData.area.split("、"),
       },
-    ].filter(change => change.oldValue !== change.newValue);
+      {
+        field: "対象都市",
+        oldValue: previousData.cities,
+        newValue: formData.cities,
+      }
+    ].filter(change => {
+      if (Array.isArray(change.oldValue) && Array.isArray(change.newValue)) {
+        return JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue);
+      }
+      return change.oldValue !== change.newValue;
+    });
 
     if (changesArray.length > 0) {
       setChanges(changesArray);
